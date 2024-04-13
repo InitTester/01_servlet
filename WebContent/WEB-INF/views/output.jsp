@@ -28,11 +28,11 @@
 		</tr>
 		<tr>
 			<td colspan="2"> <b>정액할인</b> </td>
-			<td colspan="2">0 원</td>
+			<td colspan="2">${fd}</td>
 		</tr>
 		<tr>
 			<td colspan="2"> <b>정액할인 내용</b> </td>
-			<td colspan="2">0 원 할인 (월 1만6천원, 여름 2만원 한도)</td>
+			<td colspan="2">${fdd}</td>
 		</tr>
 		<%--
 		<tr>
@@ -70,7 +70,7 @@
 				⑤ 전기요금계 : ${ebm} <br/>
 				⑥ 부가가치세 : ${vat} <br/>
 				⑦ 전력기반기금 : ${eif} <br/>
-				⑧ 할인금액 : 0원 <br/>
+				⑧ 할인금액 : ${disc} <br/>
 				⑨ 청구금액 : ${ba}
 			</td>
 		</tr>

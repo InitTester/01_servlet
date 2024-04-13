@@ -1,5 +1,7 @@
 package com.portfolio.www.com.service;
 
+import java.time.*;
+
 public class Calculation {
     // 6개의 요금을 구하는 메서드
     // 싱글톤 패턴
@@ -7,6 +9,9 @@ public class Calculation {
     private double[] items = {120.0d, 214.6d, 307.3d};
 
     private double 사용량;
+	private int 정액할인;
+	private int 정액할인값;
+	private int 정률할인; 
     private int 기본요금;
     private double 전력량요금;
     private double 기후환경요금;
@@ -14,8 +19,9 @@ public class Calculation {
     private double 전기요금계;
     private double 부가가치세;
     private double 전력기반기금;
+    private double 정률할인금액;
 
-    private Calculation(){}
+	private Calculation(){}
 
     public static Calculation getInstance() {
         if(instance == null){
@@ -44,6 +50,72 @@ public class Calculation {
         set전력기반기금();
     }
 
+	
+	/*여름철 구분 : 6월 1일 ~ 8월 31일 
+	 *기초생활수급자 및 차상위 계층 정액할인은 정률할인(30%)과 중복 적용 가능 */
+    
+	/*정액 할인
+	 * 1. 월 1만 6천원, 여름철 2만원 한도
+	 * 2. 월 1만 6천원, 여름철 2만원 한도
+	 * 3. 월 1만원, 여름철 1만 2천원 한도
+	 * 4. 월 8천원, 여름철 1만원 한도 
+	 * */
+    
+    public int get정액할인(int 정액할인) {
+		return 정액할인;
+	}
+
+	public void set정액할인(int 정액할인, LocalDateTime ldt) {
+		
+		MonthDay md1 = MonthDay.of(6, 1); 
+		MonthDay md2 = MonthDay.of(8, 31); 		
+		MonthDay value = MonthDay.of(ldt.getMonth(), ldt.getDayOfMonth());
+		boolean tf = md1.isAfter(value) && md2.isBefore(value);
+		
+		
+		System.out.println("값은 :" +정액할인);
+		
+		if(정액할인 == 1 || 정액할인 == 2) {
+			set정액할인값(tf ? 20000 : 16000);		
+		} else if(정액할인 == 3) {
+			set정액할인값(tf ? 12000 : 10000);		
+		} else {
+			set정액할인값(tf ? 10000 : 8000);
+		}
+	}
+	
+    public int get정액할인값() {
+		return 정액할인값;
+	}
+
+	public void set정액할인값(int 정액할인값) {
+		this.정액할인값 = 정액할인값;
+	}
+	
+	/*정률할인(30%)
+	 * 1. 30% 할인 (월 1만 6천원 한도)
+	 * 2. 30% 할인 (월 1만 6천원 한도)
+	 * 3. 30% 할인 (월 1만 6천원 한도)
+	 * 4. 30% 할인
+	 * 5. 30% 할인
+	 * */
+	
+	public int get정률할인() {
+		return 정률할인;
+	}
+
+	public void set정률할인(int 정률할인) {
+		
+		int 청구금액 = (int)(전기요금계 + 부가가치세 + 전력기반기금)/10 * 10;
+		
+		if(정률할인 ==1 ||정률할인 ==2 || 정률할인 ==3) {
+			set정률할인금액((청구금액/100)*0.3 < 16000 ? (청구금액/100)*0.3 : 16000); 
+		}else {
+			set정률할인금액((청구금액/100)*0.3);
+		}
+	}
+
+
     public int get기본요금() {
         return 기본요금;
     }
@@ -66,17 +138,7 @@ public class Calculation {
     		int 계산량 = Math.min(계산값, 200);
     		계산값 -= 계산량;
     		전력량요금 += (items[i] * 계산량);
-    		System.out.println(전력량요금);
     	}
-//        if(0 <= 사용량-200){
-//            전력량요금 += 200 * 120;
-//        }
-//        if(0 <= 사용량-400){
-//            전력량요금 += 200 * 214.6;
-//        }
-//        if (0 < 사용량-400){
-//            전력량요금 += (사용량-400) * 307.3;
-//        }
     }
 
     public double get기후환경요금() {
@@ -118,6 +180,14 @@ public class Calculation {
     public void set전력기반기금() {
         전력기반기금 = (int)(get전기요금계()*0.037/10) * 10;
     }
+    
+    public double get정률할인금액() {
+		return 정률할인금액;
+	}
+
+	public void set정률할인금액(double 할인금액) {
+		this.정률할인금액 = 할인금액;
+	}
 
     @Override
     public String toString() {
