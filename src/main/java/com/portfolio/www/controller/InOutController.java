@@ -1,4 +1,4 @@
-package com.portfolio.www.com.controller;
+package com.portfolio.www.controller;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.portfolio.www.com.service.Calculation;
+import com.portfolio.www.service.Calculation;
 
 @Controller
 public class InOutController {
@@ -43,7 +43,7 @@ public class InOutController {
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate date = LocalDate.parse(measureDate,format);
 
-		int dist1 = Integer.parseInt(params.get("discountType1"));
+		int dist1 = Integer.parseInt(params.get("discountType1"));		
 		int dist2 = Integer.parseInt(params.get("discountType2"));
 		
 		Calculation cal = Calculation.getInstance();		

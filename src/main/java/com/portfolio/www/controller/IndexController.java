@@ -1,4 +1,4 @@
-package com.portfolio.www.com.controller;
+package com.portfolio.www.controller;
 
 import java.util.HashMap;
 import java.util.Map;
